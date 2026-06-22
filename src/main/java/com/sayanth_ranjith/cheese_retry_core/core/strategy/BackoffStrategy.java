@@ -29,7 +29,6 @@ package com.sayanth_ranjith.cheese_retry_core.core.strategy;
  *
  * @author Sayanth P V
  * @since 1.0
- * @see com.sayanth_ranjith.cheese_retry_core.core.RetryPolicy
  */
 public interface BackoffStrategy {
 

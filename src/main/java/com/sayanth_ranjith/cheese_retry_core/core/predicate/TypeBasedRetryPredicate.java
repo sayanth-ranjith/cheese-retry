@@ -1,6 +1,4 @@
-package com.sayanth_ranjith.cheese_retry_core.core.predicate.retryPredicateImpl;
-
-import com.sayanth_ranjith.cheese_retry_core.core.predicate.RetryPredicate;
+package com.sayanth_ranjith.cheese_retry_core.core.predicate;
 
 import java.util.Set;
 

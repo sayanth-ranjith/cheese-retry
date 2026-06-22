@@ -7,7 +7,7 @@ public class FixedBackoffStrategy implements BackoffStrategy {
     private final long fixedDelayInMillis;
 
     public FixedBackoffStrategy(long fixedDelayInMillis) {
-        if (fixedDelayInMillis < 0) {
+        if (fixedDelayInMillis <= 0) {
             throw new CheeseRetryConfigurationException("Fixed delay must be non-negative");
         }
         this.fixedDelayInMillis = fixedDelayInMillis;

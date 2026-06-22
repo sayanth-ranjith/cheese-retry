@@ -30,8 +30,8 @@ import lombok.Getter;
  * <pre>
  * RetryPolicy policy = RetryPolicy.builder()
  *     .maxAttempts(3)
- *     .backoffStrategy(new ExponentialBackoff())
- *     .retryPredicate(new DefaultRetryPredicate(exceptionSet))
+ *     .backoffStrategy(new ExponentialBackoffStrategy(2000))
+ *     .retryPredicate(new TypeBasedRetryPredicate(exceptionSet))
  *     .build();
  * </pre>
  *

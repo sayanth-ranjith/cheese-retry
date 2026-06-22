@@ -1,4 +1,4 @@
-package com.sayanth_ranjith.cheese_retry_core.core;
+package com.sayanth_ranjith.cheese_retry_core.core.policy;
 
 import com.sayanth_ranjith.cheese_retry_core.core.exception.CheeseRetryConfigurationException;
 import com.sayanth_ranjith.cheese_retry_core.core.exception.ExceptionConstants;

@@ -1,0 +1,12 @@
+package com.sayanth_ranjith.cheese_retry_core.core.predicate.retryPredicateImpl;
+
+import com.sayanth_ranjith.cheese_retry_core.core.predicate.RetryPredicate;
+
+public class NeverRetryPredicate implements RetryPredicate {
+
+    @Override
+    public boolean shouldRetry(Exception exception) {
+        return false;
+    }
+
+}

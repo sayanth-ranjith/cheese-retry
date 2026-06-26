@@ -15,7 +15,13 @@ import java.lang.annotation.Target;
  *
  * <h2>Usage Example:</h2>
  * <pre>
- * &#64;CheeseRetry(maxAttempts = 3, backoffMillis = 500, retryOn = {IOException.class})
+ * &#64;CheeseRetry(
+ *     maxAttempts = 3,
+ *     retryPredicateType = RetryPredicateType.TYPED_BASED_RETRY,
+ *     retryOn = {IOException.class},
+ *     backoffStrategyType = BackoffStrategyType.FIXED,
+ *     delayInMillis = 500
+ * )
  * public void callExternalService() {
  *     // This method will retry up to 3 times with 500ms delay between attempts
  *     // Only IOException will trigger retries; other exceptions fail immediately
@@ -31,14 +37,12 @@ public @interface CheeseRetry {
 
     int maxAttempts() default 3;
 
-    long backoffMillis() default 1000;
-
     RetryPredicateType retryPredicateType() default RetryPredicateType.ALWAYS_RETRY;
 
     BackoffStrategyType backoffStrategyType() default BackoffStrategyType.FIXED;
 
-    int delayInMillis() default 1000;
+    long delayInMillis() default 1000;
 
-    Class<? extends Throwable>[] retryOn() default {Exception.class};
+    Class<? extends Exception>[] retryOn() default {Exception.class};
 
 }

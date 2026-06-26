@@ -1,25 +1,34 @@
 # Cheese Retry
 
-A work-in-progress Java library designed to simplify retry handling logic with a clean, fluent API. Say goodbye to hardcoded retry logic and hello to configurable, reusable retry strategies!
+🧀 A **lightweight, fun, and easy-to-use** Java library for retry logic. Built for learning and for developers who want to add retry capabilities to their applications **quickly and simply**.
+
+**No complexity. No bloat. Just retry logic that works.**
 
 ## 📋 Overview
 
-**Cheese Retry** provides a flexible framework for implementing sophisticated retry mechanisms in Java applications without cluttering your business logic with repetitive retry code. Whether you're handling transient failures, API timeouts, or temporary network issues, Cheese Retry makes it easy to define retry policies and apply them consistently across your codebase.
+**Cheese Retry** provides a straightforward framework for implementing retry mechanisms in Java applications. Whether you're handling transient failures, API timeouts, or temporary network issues, Cheese Retry makes it easy without cluttering your business logic.
+
+Perfect for:
+- Developers learning about retry patterns
+- Projects needing quick retry implementations
+- Spring Boot applications looking for lightweight solutions
+- Anyone who finds other retry libraries overkill
 
 ## ✨ Features
 
-- **Flexible Retry Strategies** - Define custom retry policies with configurable delays, backoff mechanisms, and conditions
-- **Fluent API** - Chain methods for readable and maintainable retry configuration
-- **Multiple Backoff Strategies** - Support for exponential backoff, linear backoff, and custom delay functions
-- **Conditional Retries** - Retry only on specific exceptions or conditions
-- **Max Retry Limits** - Control maximum retry attempts and total timeout duration
-- **Clean Separation of Concerns** - Keep retry logic separate from business logic
+- **Lightweight & Simple** - Minimal dependencies, maximum clarity
+- **Annotation-Based (`@CheeseRetry`)** - Spring Boot auto-configuration ready
+- **Fluent API** - Traditional programmatic approach when you need it
+- **Multiple Backoff Strategies** - Exponential, linear, or fixed delays
+- **Conditional Retries** - Retry only on specific exceptions
+- **Max Retry Limits** - Control attempts and timeout duration
+- **Built for Learning** - Clean, readable source code
 
 ## 🚀 Quick Start
 
 ### Installation
 
-Add Cheese Retry to your project (Maven/Gradle instructions coming soon):
+Add Cheese Retry to your project:
 
 ```xml
 <!-- Maven -->
@@ -30,130 +39,210 @@ Add Cheese Retry to your project (Maven/Gradle instructions coming soon):
 </dependency>
 ```
 
-### Basic Usage
+### Option 1: Spring Boot Annotation (Recommended for Spring apps)
+
+```java
+import com.sayanth.cheese.retry.CheeseRetry;
+import com.sayanth.cheese.retry.RetryPredicateType;
+import com.sayanth.cheese.retry.BackoffStrategyType;
+
+@Service
+public class ApiService {
+    
+    // Simple retry with defaults
+    @CheeseRetry
+    public String fetchData() {
+        return callExternalApi();
+    }
+    
+    // Customized retry strategy
+    @CheeseRetry(
+        maxAttempts = 5,
+        delayInMillis = 500,
+        retryOn = {IOException.class, TimeoutException.class},
+        backoffStrategyType = BackoffStrategyType.EXPONENTIAL
+    )
+    public String fetchDataWithBackoff() {
+        return callExternalApi();
+    }
+    
+    // Exponential backoff configuration
+    @CheeseRetry(
+        maxAttempts = 4,
+        delayInMillis = 100,
+        backoffStrategyType = BackoffStrategyType.EXPONENTIAL,
+        retryPredicateType = RetryPredicateType.ALWAYS_RETRY
+    )
+    public void databaseOperation() {
+        // Implementation here
+    }
+}
+```
+
+**Annotation Parameters:**
+- `maxAttempts` - Maximum retry attempts (default: 3)
+- `delayInMillis` - Delay between retries in milliseconds (default: 1000)
+- `retryOn` - Exception classes that trigger retry (default: Exception.class)
+- `backoffStrategyType` - FIXED, EXPONENTIAL, or LINEAR (default: FIXED)
+- `retryPredicateType` - ALWAYS_RETRY or custom predicate logic
+
+### Option 2: Programmatic API
 
 ```java
 import com.sayanth.cheese.retry.RetryPolicy;
+import com.sayanth.cheese.retry.CoreRetryExecutor;
+import com.sayanth.cheese.retry.ExponentialBackoffStrategy;
+import com.sayanth.cheese.retry.AlwaysRetryPredicate;
 
-// Simple retry with default settings
-var result = RetryPolicy.builder()
-    .maxAttempts(3)
-    .delayMs(1000)
-    .execute(() -> riskyOperation());
-
-// Retry only on specific exceptions
-var result = RetryPolicy.builder()
+// Create a retry policy
+RetryPolicy policy = RetryPolicy.builder()
     .maxAttempts(5)
-    .delayMs(500)
-    .retryOn(IOException.class, TimeoutException.class)
-    .execute(() -> callExternalApi());
+    .retryPredicate(new AlwaysRetryPredicate())
+    .backoffStrategy(new ExponentialBackoffStrategy(1000))
+    .build();
 
-// Exponential backoff strategy
-var result = RetryPolicy.builder()
-    .maxAttempts(4)
-    .initialDelayMs(100)
-    .exponentialBackoff(2.0) // multiplier
-    .execute(() -> databaseOperation());
+// Execute with retry logic
+RetryExecutor executor = new CoreRetryExecutor(policy);
+
+try {
+    executor.execute(() -> {
+        // Your task that might fail
+        return fetchData();
+    });
+} catch (Exception e) {
+    throw new RuntimeException("Failed after retries", e);
+}
 ```
 
 ## 📖 Documentation
 
-### Core Concepts
+### Core Components
 
-#### RetryPolicy
-The main builder class for configuring and executing operations with retry logic.
+#### @CheeseRetry Annotation
+Apply to any method in a Spring Boot application for automatic retry handling:
+```java
+@CheeseRetry(maxAttempts = 3, delayInMillis = 500)
+public String riskyMethod() {
+    // Implementation
+}
+```
 
-**Methods:**
-- `maxAttempts(int)` - Maximum number of retry attempts (default: 3)
-- `delayMs(long)` - Fixed delay between retries in milliseconds
-- `initialDelayMs(long)` - Initial delay for backoff strategies
-- `exponentialBackoff(double)` - Enable exponential backoff with multiplier
-- `linearBackoff(long)` - Enable linear backoff with increment
-- `retryOn(Class<? extends Exception>...)` - Specify which exceptions trigger retry
-- `retryIf(Predicate<Exception>)` - Custom retry condition
-- `timeout(long)` - Maximum total execution time in milliseconds
-- `execute(Callable<T>)` - Execute the operation with retry logic
+#### RetryPolicy (Fluent Builder)
+Programmatic configuration with a clean, readable API:
+```java
+RetryPolicy.builder()
+    .maxAttempts(3)
+    .delayMs(1000)
+    .execute(() -> riskyOperation());
+```
 
 #### Backoff Strategies
 
-**Fixed Delay:** Waits the same amount of time between each retry attempt
+**Fixed Delay** - Same wait time between retries
 ```java
-RetryPolicy.builder()
-    .maxAttempts(3)
-    .delayMs(1000)
-    .execute(operation);
+new FixedBackoffStrategy(1000) // Wait 1 second each time
 ```
 
-**Exponential Backoff:** Increases delay exponentially after each attempt
+**Exponential Backoff** - Exponentially increase wait time
 ```java
-RetryPolicy.builder()
-    .maxAttempts(5)
-    .initialDelayMs(100)
-    .exponentialBackoff(2.0) // 100ms, 200ms, 400ms, 800ms
-    .execute(operation);
+new ExponentialBackoffStrategy(1000) // 1s, 2s, 4s, 8s...
 ```
 
-**Linear Backoff:** Increases delay linearly after each attempt
+**Linear Backoff** - Linearly increase wait time
 ```java
-RetryPolicy.builder()
-    .maxAttempts(4)
-    .initialDelayMs(500)
-    .linearBackoff(500) // 500ms, 1000ms, 1500ms, 2000ms
-    .execute(operation);
+new LinearBackoffStrategy(500) // 500ms, 1000ms, 1500ms...
 ```
 
-## 🔧 Advanced Usage
+### Retry Predicates
 
-### Custom Retry Conditions
-
+**AlwaysRetryPredicate** - Retry on any exception
 ```java
-// Retry only on specific status codes or conditions
-RetryPolicy.builder()
-    .maxAttempts(3)
-    .delayMs(1000)
-    .retryIf(ex -> ex.getMessage().contains("temporary"))
-    .execute(() -> apiCall());
+.retryPredicate(new AlwaysRetryPredicate())
 ```
 
-### Timeout Protection
-
+**Custom Predicates** - Implement your own logic
 ```java
-// Fail fast if total execution time exceeds timeout
-RetryPolicy.builder()
-    .maxAttempts(10)
-    .delayMs(100)
-    .timeout(5000) // 5 second maximum total time
-    .execute(() -> operation());
+.retryIf(ex -> ex.getMessage().contains("temporary"))
 ```
 
-### Combining Strategies
+## 💡 Real-World Examples
+
+### Example 1: REST API Call with Exponential Backoff
 
 ```java
-// Exponential backoff + timeout + specific exceptions
-RetryPolicy.builder()
-    .maxAttempts(5)
-    .initialDelayMs(200)
-    .exponentialBackoff(1.5)
-    .timeout(10000)
-    .retryOn(TemporaryFailureException.class, TimeoutException.class)
-    .execute(() -> criticalOperation());
+@Service
+public class ExternalApiClient {
+    
+    @CheeseRetry(
+        maxAttempts = 5,
+        delayInMillis = 200,
+        backoffStrategyType = BackoffStrategyType.EXPONENTIAL,
+        retryOn = {HttpClientErrorException.class}
+    )
+    public ResponseEntity<Data> fetchUserData(String userId) {
+        return restTemplate.getForEntity("/api/users/" + userId, Data.class);
+    }
+}
+```
+
+### Example 2: Database Operation with Fixed Delay
+
+```java
+@Repository
+public class UserRepository {
+    
+    @CheeseRetry(
+        maxAttempts = 3,
+        delayInMillis = 500,
+        retryOn = {DataAccessException.class}
+    )
+    public User save(User user) {
+        return userJpaRepository.save(user);
+    }
+}
+```
+
+### Example 3: Programmatic Retry
+
+```java
+public class PaymentService {
+    public void processPayment(Payment payment) throws Exception {
+        RetryPolicy policy = RetryPolicy.builder()
+            .maxAttempts(3)
+            .retryPredicate(new AlwaysRetryPredicate())
+            .backoffStrategy(new ExponentialBackoffStrategy(1000))
+            .build();
+        
+        new CoreRetryExecutor(policy).execute(() -> {
+            paymentGateway.charge(payment);
+            return null;
+        });
+    }
+}
 ```
 
 ## 🏗️ Project Status
 
-⚠️ **Work in Progress** - This library is currently under active development. APIs and features may change. We welcome feedback and contributions!
+✅ **Lightweight & Production-Ready for Simple Use Cases**
 
-### Planned Features
+This is a learning project built for fun and simplicity. Perfect for:
+- Understanding retry patterns
+- Adding retry logic without heavyweight dependencies
+- Spring Boot projects needing quick solutions
+- Educational purposes
 
-- [ ] Async retry support with CompletableFuture
+**Note:** For enterprise-grade retry solutions with advanced features (circuit breakers, bulkheads, metrics), consider libraries like Resilience4j.
+
+### Potential Future Additions
+
+- [ ] Async support with CompletableFuture
 - [ ] Jitter support for backoff strategies
-- [ ] Metrics and monitoring hooks
-- [ ] Circuit breaker pattern integration
-- [ ] Retry budgets and rate limiting
+- [ ] Built-in metrics and logging hooks
+- [ ] Circuit breaker integration
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to:
+Contributions and improvements are welcome!
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -165,14 +254,10 @@ Contributions are welcome! Please feel free to:
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 💬 Feedback & Issues
+## 💬 Feedback & Questions
 
-Found a bug or have a feature request? Please open an issue on the [GitHub Issues page](https://github.com/sayanth-ranjith/cheese-retry/issues).
-
-## 📞 Support
-
-For questions and discussions, feel free to reach out or open a discussion in the repository.
+Have ideas or run into issues? Open an issue on the [GitHub Issues page](https://github.com/sayanth-ranjith/cheese-retry/issues).
 
 ---
 
-**Made with ❤️ by Sayanth Ranjith**
+**Made with ❤️ by Sayanth Ranjith** - Because sometimes, the simplest solution is the best solution. 🧀

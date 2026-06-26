@@ -1,0 +1,38 @@
+name: Sync feature/ai-read-write from main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync-feature-branch:
+    name: Merge main -> feature/ai-read-write
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: feature/ai-read-write
+          fetch-depth: 0
+
+      - name: Configure Git bot identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Fetch latest main
+        run: git fetch origin main
+
+      - name: Merge main into feature branch
+        run: |
+          git merge origin/main \
+            --no-edit \
+            --strategy-option=ours \
+            -m "chore: sync feature/ai-read-write with main [bot]"
+
+      - name: Push updated feature branch
+        run: git push origin feature/ai-read-write

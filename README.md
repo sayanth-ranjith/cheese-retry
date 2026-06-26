@@ -35,7 +35,7 @@ Add Cheese Retry to your project:
 <dependency>
     <groupId>com.sayanth</groupId>
     <artifactId>cheese-retry</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.0.11</version>
 </dependency>
 ```
 

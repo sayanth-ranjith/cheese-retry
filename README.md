@@ -59,6 +59,7 @@ public class ApiService {
     @CheeseRetry(
         maxAttempts = 5,
         delayInMillis = 500,
+        retryPredicateType = RetryPredicateType.TYPED_BASED_RETRY,
         retryOn = {IOException.class, TimeoutException.class},
         backoffStrategyType = BackoffStrategyType.EXPONENTIAL
     )
@@ -83,7 +84,7 @@ public class ApiService {
 - `maxAttempts` - Maximum retry attempts (default: 3)
 - `delayInMillis` - Delay between retries in milliseconds (default: 1000)
 - `retryOn` - Exception classes that trigger retry (default: Exception.class)
-- `backoffStrategyType` - FIXED, EXPONENTIAL, or LINEAR (default: FIXED)
+- `backoffStrategyType` - FIXED, EXPONENTIAL (default: FIXED)
 - `retryPredicateType` - ALWAYS_RETRY or custom predicate logic
 
 ### Option 2: Programmatic API
@@ -147,12 +148,6 @@ new FixedBackoffStrategy(1000) // Wait 1 second each time
 ```java
 new ExponentialBackoffStrategy(1000) // 1s, 2s, 4s, 8s...
 ```
-
-**Linear Backoff** - Linearly increase wait time
-```java
-new LinearBackoffStrategy(500) // 500ms, 1000ms, 1500ms...
-```
-
 ### Retry Predicates
 
 **AlwaysRetryPredicate** - Retry on any exception

@@ -1,6 +1,6 @@
 # Cheese Retry
 
-Visit **https://cheese-retry.vercel.app/ to know more about Cheese.
+Visit https://cheese-retry.vercel.app/ to know more about Cheese.
 
 🧀 A **lightweight, fun, and easy-to-use** Java library for retry logic. Built for learning and for developers who want to add retry capabilities to their applications **quickly and simply**.
 

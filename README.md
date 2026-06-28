@@ -33,7 +33,7 @@ Add Cheese Retry to your project:
 ```xml
 <!-- Maven -->
 <dependency>
-    <groupId>com.sayanth</groupId>
+    <groupId>io.github.sayanth-ranjith</groupId>
     <artifactId>cheese-retry</artifactId>
     <version>0.0.11</version>
 </dependency>

@@ -36,7 +36,7 @@ Add Cheese Retry to your project:
 <!-- Maven -->
 <dependency>
     <groupId>io.github.sayanth-ranjith</groupId>
-    <artifactId>cheese-retry</artifactId>
+    <artifactId>cheese-retry-core</artifactId>
     <version>0.0.11</version>
 </dependency>
 ```

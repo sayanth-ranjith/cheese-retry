@@ -1,7 +1,7 @@
-#CODEX COMMENTS:
+# CODEX COMMENTS:
 Short answer: good enough for a learning/demo retry library or quick internal spin-up, but I would not call it production-ready yet.
 
-  ##What’s Good
+  ## What’s Good
 
   - The core shape is clean: RetryPolicy, BackoffStrategy, RetryPredicate, and RetryExecutor are separated well.
   - Strategy pattern is used correctly for fixed vs exponential backoff.
@@ -9,7 +9,7 @@ Short answer: good enough for a learning/demo retry library or quick internal sp
   - Annotation-based Spring AOP support is a nice quick-start API.
   - RetryPolicy is immutable and validates required fields.
 
-  ##Main Issues
+  ## Main Issues
 
   - src/main/java/com/sayanth_ranjith/cheese_retry_core/executor/CoreRetryExecutor.java:37: Thread.sleep(...) interruption is not handled. If interrupted, it
     throws through as a normal failure and does not restore interrupt status. Should catch InterruptedException, call Thread.currentThread().interrupt(), then
@@ -33,7 +33,7 @@ Short answer: good enough for a learning/demo retry library or quick internal sp
   - Tests are basically absent. The only test is Spring context loading, so retry counts, backoff values, predicates, AOP behavior, and exception propagation are
     unverified.
 
-  ##SOLID View
+  ## SOLID View
 
   - S/D/O: Mostly good. Clear split between policy, strategy, predicate, executor. New strategies/predicates can be added without changing executor.
   - L: Fine for current interfaces, though BackoffStrategy contract says non-negative but implementations require positive.
@@ -41,7 +41,7 @@ Short answer: good enough for a learning/demo retry library or quick internal sp
   - D: Decent in the core, weaker in AOP because CheeseAspect directly constructs strategies, predicates, and executor. Acceptable for small library, but a
     factory would clean this up later.
 
-  ##Verdict
+  ## Verdict
   For “quick spin up retry logic”: yes, after fixing interruption handling, exponential delay semantics, README package mismatch, and adding basic unit tests.
 
   For serious production use: not yet. Missing jitter, max delay cap, async support, metrics/log hooks, clearer exception semantics, and meaningful test

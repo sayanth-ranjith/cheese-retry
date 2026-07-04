@@ -6,8 +6,6 @@ import com.sayanth_ranjith.cheese_retry_core.core.policy.RetryPolicy;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.logging.Logger;
-
 @Slf4j
 @Builder
 public class CoreRetryExecutor implements RetryExecutor {

@@ -1,0 +1,57 @@
+name: Bug Report
+description: File a bug report.
+title: "[Bug]: "
+labels: ["bug"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+
+  - type: input
+    id: assigner
+    attributes:
+      label: Assigner Details
+      placeholder: email@example.com
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      placeholder: Tell us what went wrong?
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context, screenshots, and files
+      description: Paste anything helpful here. You can include text, links, markdown, screenshot embeds, or file references.
+      placeholder: |
+        - Extra notes
+        - Steps to reproduce
+        - Screenshot pasted or linked here
+        - File names, logs, or attachments
+    validations:
+      required: false
+
+  - type: dropdown
+    id: version
+    attributes:
+      label: Version
+      options:
+        - 0.0.11
+        - 0.0.12
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checkbox1
+    attributes:
+      label: Issue criticality
+      options:
+        - label: sev1
+        - label: sev2
+        - label: sev3
+        - label: sev4

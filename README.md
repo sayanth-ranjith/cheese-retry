@@ -21,7 +21,7 @@ Perfect for:
 - **Lightweight & Simple** - Minimal dependencies, maximum clarity
 - **Annotation-Based (`@CheeseRetry`)** - Spring Boot auto-configuration ready
 - **Fluent API** - Traditional programmatic approach when you need it
-- **Multiple Backoff Strategies** - Exponential, linear, or fixed delays
+- **Multiple Backoff Strategies** - Exponential, exponential with jitter, or fixed delays
 - **Conditional Retries** - Retry only on specific exceptions
 - **Max Retry Limits** - Control attempts and timeout duration
 - **Built for Learning** - Clean, readable source code
@@ -86,7 +86,7 @@ public class ApiService {
 - `maxAttempts` - Maximum retry attempts (default: 3)
 - `delayInMillis` - Delay between retries in milliseconds (default: 1000)
 - `retryOn` - Exception classes that trigger retry (default: Exception.class)
-- `backoffStrategyType` - FIXED, EXPONENTIAL (default: FIXED)
+- `backoffStrategyType` - FIXED, EXPONENTIAL, EXPONENTIAL_WITH_JITTER (default: FIXED)
 - `retryPredicateType` - ALWAYS_RETRY or custom predicate logic
 
 ### Option 2: Programmatic API
@@ -149,6 +149,11 @@ new FixedBackoffStrategy(1000) // Wait 1 second each time
 **Exponential Backoff** - Exponentially increase wait time
 ```java
 new ExponentialBackoffStrategy(1000) // 1s, 2s, 4s, 8s...
+```
+
+**Exponential Backoff With Jitter** - Randomize each retry delay within the exponential ceiling
+```java
+new JitteredExponentialBackoffStrategy(1000) // random delay from 0 up to 2s, 4s, 8s...
 ```
 ### Retry Predicates
 
@@ -233,7 +238,7 @@ This is a learning project built for fun and simplicity. Perfect for:
 ### Potential Future Additions
 
 - [ ] Async support with CompletableFuture
-- [ ] Jitter support for backoff strategies
+- [x] Jitter support for backoff strategies
 - [ ] Built-in metrics and logging hooks
 - [ ] Circuit breaker integration
 

@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public enum RetryPredicateType {
     ALWAYS_RETRY,
+    @Deprecated(forRemoval = false)
     NEVER_RETRY,
     TYPED_BASED_RETRY
     ;

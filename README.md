@@ -162,6 +162,8 @@ new JitteredExponentialBackoffStrategy(1000) // random delay from 0 up to 2s, 4s
 .retryPredicate(new AlwaysRetryPredicate())
 ```
 
+`NEVER_RETRY` is retained for backward compatibility but is deprecated. If you do not want retry behavior, do not apply `@CheeseRetry`.
+
 **Custom Predicates** - Implement your own logic
 ```java
 .retryIf(ex -> ex.getMessage().contains("temporary"))

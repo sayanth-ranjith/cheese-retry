@@ -11,6 +11,7 @@ import com.sayanth_ranjith.cheese_retry_core.core.predicate.type.RetryPredicateT
 import com.sayanth_ranjith.cheese_retry_core.core.strategy.BackoffStrategy;
 import com.sayanth_ranjith.cheese_retry_core.core.strategy.ExponentialBackoffStrategy;
 import com.sayanth_ranjith.cheese_retry_core.core.strategy.FixedBackoffStrategy;
+import com.sayanth_ranjith.cheese_retry_core.core.strategy.JitteredExponentialBackoffStrategy;
 import com.sayanth_ranjith.cheese_retry_core.core.strategy.type.BackoffStrategyType;
 
 import java.util.Arrays;
@@ -56,6 +57,7 @@ public class RetryPolicyFactory {
         return switch (strategyType) {
             case FIXED -> new FixedBackoffStrategy(delayInMillis);
             case EXPONENTIAL -> new ExponentialBackoffStrategy(delayInMillis);
+            case EXPONENTIAL_WITH_JITTER -> new JitteredExponentialBackoffStrategy(delayInMillis);
         };
     }
 

@@ -23,6 +23,19 @@ body:
     validations:
       required: true
 
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context, screenshots, and files
+      description: Paste anything helpful here. You can include text, links, markdown, screenshot embeds, or file references.
+      placeholder: |
+        - Extra notes
+        - Steps to reproduce
+        - Screenshot pasted or linked here
+        - File names, logs, or attachments
+    validations:
+      required: false
+
   - type: dropdown
     id: version
     attributes:

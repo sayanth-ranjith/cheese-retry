@@ -24,6 +24,7 @@ Perfect for:
 - **Multiple Backoff Strategies** - Exponential, exponential with jitter, or fixed delays
 - **Conditional Retries** - Retry only on specific exceptions
 - **Max Retry Limits** - Control attempts and timeout duration
+- **Retry Timeouts** - Stop retrying after a configurable time window
 - **Built for Learning** - Clean, readable source code
 
 ## 🚀 Quick Start
@@ -85,6 +86,7 @@ public class ApiService {
 **Annotation Parameters:**
 - `maxAttempts` - Maximum retry attempts (default: 3)
 - `delayInMillis` - Delay between retries in milliseconds (default: 1000)
+- `timeoutInMillis` - Maximum time spent retrying before aborting (default: 0, disabled)
 - `retryOn` - Exception classes that trigger retry (default: Exception.class)
 - `backoffStrategyType` - FIXED, EXPONENTIAL, EXPONENTIAL_WITH_JITTER (default: FIXED)
 - `retryPredicateType` - ALWAYS_RETRY or custom predicate logic

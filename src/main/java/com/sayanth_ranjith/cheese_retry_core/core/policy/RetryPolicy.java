@@ -30,6 +30,7 @@ import lombok.Getter;
  * <pre>
  * RetryPolicy policy = RetryPolicy.builder()
  *     .maxAttempts(3)
+ *     .timeoutInMillis(5000)
  *     .backoffStrategy(new ExponentialBackoffStrategy(2000))
  *     .retryPredicate(new TypeBasedRetryPredicate(exceptionSet))
  *     .build();
@@ -64,6 +65,12 @@ public class RetryPolicy {
     private final RetryPredicate retryPredicate;
 
     /**
+     * The maximum retry window in milliseconds.
+     * A value of 0 disables the timeout.
+     */
+    private final long timeoutInMillis;
+
+    /**
      * Package-private constructor to enforce builder usage and ensure validation.
      * This constructor is not intended to be called directly from outside the package.
      * Use {@link #builder()} to create instances using the builder pattern.
@@ -74,18 +81,21 @@ public class RetryPolicy {
      *   <li>{@code maxAttempts} must be greater than 0</li>
      *   <li>{@code backoffStrategy} must not be null</li>
      *   <li>{@code retryPredicate} must not be null</li>
+     *   <li>{@code timeoutInMillis} must be greater than or equal to 0</li>
      * </ul>
      * </p>
      *
      * @param maxAttempts the maximum number of retry attempts (must be > 0)
      * @param backoffStrategy the strategy for calculating delays between retries (must not be null)
      * @param retryPredicate the logic to determine if an exception should trigger a retry (must not be null)
+     * @param timeoutInMillis the maximum retry window in milliseconds, or 0 to disable timeout handling
      * @throws CheeseRetryConfigurationException if any validation check fails with a descriptive error message
      */
-    RetryPolicy(int maxAttempts, BackoffStrategy backoffStrategy, RetryPredicate retryPredicate) {
+    RetryPolicy(int maxAttempts, BackoffStrategy backoffStrategy, RetryPredicate retryPredicate, long timeoutInMillis) {
         this.maxAttempts = maxAttempts;
         this.backoffStrategy = backoffStrategy;
         this.retryPredicate = retryPredicate;
+        this.timeoutInMillis = timeoutInMillis;
         validate();
     }
 
@@ -115,6 +125,9 @@ public class RetryPolicy {
         }
         if (retryPredicate == null) {
             throw new CheeseRetryConfigurationException(ExceptionConstants.RETRY_PREDICATE_NULL);
+        }
+        if (timeoutInMillis < 0) {
+            throw new CheeseRetryConfigurationException(ExceptionConstants.TIMEOUT_IN_MILLIS_NEGATIVE);
         }
     }
 }

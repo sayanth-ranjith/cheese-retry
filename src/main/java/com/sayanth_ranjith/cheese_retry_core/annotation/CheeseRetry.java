@@ -17,6 +17,7 @@ import java.lang.annotation.Target;
  * <pre>
  * &#64;CheeseRetry(
  *     maxAttempts = 3,
+ *     timeoutInMillis = 5000,
  *     retryPredicateType = RetryPredicateType.TYPED_BASED_RETRY,
  *     retryOn = {IOException.class},
  *     backoffStrategyType = BackoffStrategyType.FIXED,
@@ -42,6 +43,8 @@ public @interface CheeseRetry {
     BackoffStrategyType backoffStrategyType() default BackoffStrategyType.FIXED;
 
     long delayInMillis() default 1000;
+
+    long timeoutInMillis() default 0;
 
     Class<? extends Exception>[] retryOn() default {Exception.class};
 

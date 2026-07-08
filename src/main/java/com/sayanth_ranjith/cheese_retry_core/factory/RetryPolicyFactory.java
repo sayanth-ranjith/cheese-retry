@@ -46,6 +46,7 @@ public class RetryPolicyFactory {
                 .maxAttempts(cheeseRetry.maxAttempts())
                 .backoffStrategy(buildBackoffStrategy(cheeseRetry.backoffStrategyType(), cheeseRetry.delayInMillis()))
                 .retryPredicate(buildRetryPredicate(cheeseRetry.retryPredicateType(), cheeseRetry.retryOn()))
+                .timeoutInMillis(cheeseRetry.timeoutInMillis())
                 .build();
     }
 

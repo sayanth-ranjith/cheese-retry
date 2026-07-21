@@ -134,9 +134,10 @@ public String riskyMethod() {
 Programmatic configuration with a clean, readable API:
 ```java
 RetryPolicy.builder()
-    .maxAttempts(3)
-    .delayMs(1000)
-    .execute(() -> riskyOperation());
+    .maxAttempts(5)
+    .retryPredicate(new AlwaysRetryPredicate())
+    .backoffStrategy(new ExponentialBackoffStrategy(1000))
+    .build();
 ```
 
 #### Backoff Strategies

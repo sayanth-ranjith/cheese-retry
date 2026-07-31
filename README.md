@@ -4,8 +4,6 @@
 
 ![Java](https://img.shields.io/badge/Java-17+-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-Compatible-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
-![Maven Central](https://img.shields.io/maven-central/v/io.github.sayanth007/cheese-retry?style=for-the-badge)
-![License](https://img.shields.io/github/license/Sayanth007/cheese-retry?style=for-the-badge)
 
 ## 🏗️ Architecture
 

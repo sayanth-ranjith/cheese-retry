@@ -1,5 +1,19 @@
 # Cheese Retry
 
+## 🛠️ Built With
+
+![Java](https://img.shields.io/badge/Java-17+-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-Compatible-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+![Maven Central](https://img.shields.io/maven-central/v/io.github.sayanth007/cheese-retry?style=for-the-badge)
+![License](https://img.shields.io/github/license/Sayanth007/cheese-retry?style=for-the-badge)
+
+## 🏗️ Architecture
+
+![SOLID](https://img.shields.io/badge/Principles-SOLID-blue?style=for-the-badge)
+![Strategy Pattern](https://img.shields.io/badge/Pattern-Strategy-purple?style=for-the-badge)
+![Factory Pattern](https://img.shields.io/badge/Pattern-Factory-purple?style=for-the-badge)
+![Builder Pattern](https://img.shields.io/badge/Pattern-Builder-purple?style=for-the-badge)
+
 Visit https://cheese-retry.vercel.app/ to know more about Cheese.
 
 🧀 A **lightweight, fun, and easy-to-use** Java library for retry logic. Built for learning and for developers who want to add retry capabilities to their applications **quickly and simply**.
@@ -37,7 +51,7 @@ Add Cheese Retry to your project:
 <dependency>
     <groupId>io.github.sayanth-ranjith</groupId>
     <artifactId>cheese-retry-core</artifactId>
-    <version>0.0.12</version>
+    <version>0.0.13</version>
 </dependency>
 ```
 
